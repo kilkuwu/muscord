@@ -1,0 +1,2 @@
+POST https://translate.googleapis.com/v3beta1/{parent=projects/*}:translateText
+

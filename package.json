@@ -1,0 +1,31 @@
+{
+  "name": "muscord",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "register": "ts-node src/register.ts",
+    "cf-typegen": "wrangler types",
+    "ngrok": "ngrok http --domain=fly-suited-awfully.ngrok-free.app 8787"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.4.5",
+    "@cloudflare/workers-types": "^4.20240806.0",
+    "typescript": "^5.5.2",
+    "vitest": "1.5.0",
+    "wrangler": "^3.60.3"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^1.8.2",
+    "@discordjs/core": "^1.2.0",
+    "@discordjs/rest": "^2.3.0",
+    "discord-api-types": "^0.37.93",
+    "discord-interactions": "^4.0.0",
+    "dotenv": "^16.4.5",
+    "hono": "^4.5.5",
+    "ngrok": "^5.0.0-beta.2"
+  }
+}
