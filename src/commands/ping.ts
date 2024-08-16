@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from '.';
-import { InteractionResponseType } from 'discord-api-types/v10';
+import { InteractionResponseType } from '@discordjs/core/http-only';
 
 export const pingCommand: Command = {
 	data: new SlashCommandBuilder()

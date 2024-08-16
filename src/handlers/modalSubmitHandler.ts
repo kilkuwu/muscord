@@ -1,30 +1,9 @@
+import { modalMap } from '../modals';
 import MyContext from '../types/MyContext';
 import {
 	APIModalSubmitInteraction,
 	InteractionResponseType,
-} from 'discord-api-types/v10';
-
-export interface Modal {
-	customId: string;
-	run: (
-		c: MyContext,
-		interaction: APIModalSubmitInteraction
-	) => Promise<void | Response>;
-	defer_first?: boolean;
-}
-
-const modals: Modal[] = [
-	{
-		customId: 'r34FiltersDelete',
-		run: async (c, interaction) => {},
-	},
-];
-
-const modalMap = new Map<string, Modal>();
-
-for (const modal of modals) {
-	modalMap.set(modal.customId, modal);
-}
+} from '@discordjs/core/http-only';
 
 export default async function modalSubmitHandler(
 	c: MyContext,
@@ -36,6 +15,19 @@ export default async function modalSubmitHandler(
 		return c.json({ error: 'Unknown Modal' }, 400);
 	}
 
+	if (!modal.defer_first) {
+		return await modal.run(c, interaction);
+	}
+
+	c.executionCtx.waitUntil(
+		(async () => {
+			while (c.res.status != 200) {
+				await new Promise<void>((f) => f());
+			} // wait for the defer to be finshed
+
+			await modal.run(c, interaction);
+		})()
+	);
 	return c.json({
 		type: InteractionResponseType.DeferredChannelMessageWithSource,
 	});

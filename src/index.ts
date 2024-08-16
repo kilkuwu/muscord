@@ -8,7 +8,7 @@ import {
 	ApplicationCommandType,
 	InteractionResponseType,
 	InteractionType,
-} from 'discord-api-types/v10';
+} from '@discordjs/core/http-only';
 import E from './types/Env';
 import chatInputApplicationCommandHandler from './handlers/chatInputApplicationCommandHandler';
 import modalSubmitHandler from './handlers/modalSubmitHandler';
@@ -46,11 +46,14 @@ app.get('/test2', async (c) => {
 
 app.post('/', verifyDiscordRequest, async (c) => {
 	const interaction: APIInteraction = await c.req.json();
+	console.log('Interaction type', interaction.type);
+
 	if (interaction.type == InteractionType.Ping) {
 		return c.json({
 			type: InteractionResponseType.Pong,
 		});
 	}
+
 	if (
 		interaction.type === InteractionType.ApplicationCommand
 	) {
@@ -68,7 +71,6 @@ app.post('/', verifyDiscordRequest, async (c) => {
 	) {
 		return await modalSubmitHandler(c, interaction);
 	}
-
 	return c.json({ error: 'Unknown Type' }, 400);
 });
 

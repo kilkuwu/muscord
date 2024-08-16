@@ -1,4 +1,4 @@
-import { APIChatInputApplicationCommandInteraction } from 'discord-api-types/v10';
+import { APIChatInputApplicationCommandInteraction } from '@discordjs/core/http-only';
 import MyContext from '../types/MyContext';
 import { SlashCommandOptionsOnlyBuilder } from '@discordjs/builders';
 import { pingCommand } from './ping';

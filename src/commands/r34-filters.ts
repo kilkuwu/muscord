@@ -1,12 +1,8 @@
-import {
-	ActionRowBuilder,
-	ModalBuilder,
-	SlashCommandBuilder,
-	TextInputBuilder,
-} from '@discordjs/builders';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from '.';
-import { InteractionResponseType } from 'discord-api-types/v10';
-import { TextInputStyle } from '@discordjs/core/http-only';
+import { InteractionResponseType } from '@discordjs/core/http-only';
+import { r34FiltersDeleteModal } from '../modals/r34FiltersDelete';
+import { r34FiltersUpdateModal } from '../modals/r34FiltersUpdate';
 
 export const r34FiltersComamnd: Command = {
 	data: new SlashCommandBuilder()
@@ -18,7 +14,7 @@ export const r34FiltersComamnd: Command = {
 				.setName('action')
 				.setDescription('The action to do with filters')
 				.setMinValue(0)
-				.setMaxValue(3)
+				.setMaxValue(2)
 				.setRequired(true)
 				.addChoices([
 					{
@@ -26,16 +22,12 @@ export const r34FiltersComamnd: Command = {
 						value: 0,
 					},
 					{
-						name: 'add',
+						name: 'update',
 						value: 1,
 					},
 					{
-						name: 'update',
-						value: 2,
-					},
-					{
 						name: 'delete',
-						value: 3,
+						value: 2,
 					},
 				])
 		),
@@ -44,14 +36,11 @@ export const r34FiltersComamnd: Command = {
 	run: async (c, interaction, inputMap) => {
 		const action = inputMap.get('action') || 0;
 
-		const filters = (await c.env.KV_STORE.get(
-			'filters',
-			'json'
-		)) as any;
-
-    console.log(action);
-
 		if (action == 0) {
+			const filters = (await c.env.KV_STORE.get(
+				'filters',
+				'json'
+			)) as any;
 			return c.json({
 				type: InteractionResponseType.ChannelMessageWithSource,
 				data: {
@@ -64,26 +53,17 @@ export const r34FiltersComamnd: Command = {
 			});
 		}
 
-		if (action == 3) {
-			const modal = new ModalBuilder()
-				.setCustomId('r34FiltersDelete')
-				.setTitle('Delete filters');
-			const deleteListInput = new TextInputBuilder()
-				.setCustomId('r34FiltersDeleteList')
-				.setStyle(TextInputStyle.Paragraph)
-				.setLabel('Delete List')
-				.setPlaceholder(
-					'Type in all filter name you want to delete, each on a line'
-				);
-			const firstRow =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					deleteListInput
-				);
-			modal.addComponents(firstRow);
-
+		if (action == 2) {
 			return c.json({
 				type: InteractionResponseType.Modal,
-				data: modal.toJSON(),
+				data: r34FiltersDeleteModal.data.toJSON(),
+			});
+		}
+
+		if (action == 1) {
+			return c.json({
+				type: InteractionResponseType.Modal,
+				data: r34FiltersUpdateModal.data.toJSON(),
 			});
 		}
 	},

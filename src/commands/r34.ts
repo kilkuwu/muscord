@@ -57,7 +57,6 @@ export const r34Command: Command = {
 
 		const filters: any =
 			(await c.env.KV_STORE.get('filters', 'json')) || {};
-		console.log(filters);
 
 		for (const appliedFilter of filter.split(
 			whiteSpaceRegex

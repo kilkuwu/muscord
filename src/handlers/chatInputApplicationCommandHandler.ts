@@ -4,7 +4,7 @@ import {
 	APIChatInputApplicationCommandInteraction,
 	ApplicationCommandOptionType,
 	InteractionResponseType,
-} from 'discord-api-types/v10';
+} from '@discordjs/core/http-only';
 
 export default async function chatInputApplicationCommandHandler(
 	c: MyContext,
@@ -49,10 +49,8 @@ export default async function chatInputApplicationCommandHandler(
 		}
 	}
 
-  console.log(command.defer_first);
 
 	if (!command.defer_first) {
-    console.log("Called this")
 		return (await command.run(
 			c,
 			interaction,

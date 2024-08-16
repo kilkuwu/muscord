@@ -3,7 +3,7 @@ config({ path: '.dev.vars' });
 
 import { commands } from './commands';
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v10';
+import { Routes } from '@discordjs/core/http-only';
 
 /**
  * Register all commands globally.  This can take o(minutes), so wait until
