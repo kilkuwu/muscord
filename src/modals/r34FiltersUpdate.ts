@@ -37,17 +37,15 @@ export const r34FiltersUpdateModal: Modal = {
 		return modal;
 	})(),
 	run: async (c, interaction) => {
-		const filters = (await c.env.KV_STORE.get(
+		const filters = ((await c.env.KV_STORE.get(
 			'filters',
 			'json'
-		)) as any;
-
+		)) || {}) as any;
 
 		const key =
 			interaction.data.components[0].components[0].value;
 		const value =
 			interaction.data.components[1].components[0].value;
-
 
 		if (
 			!filters.hasOwnProperty(key) ||
