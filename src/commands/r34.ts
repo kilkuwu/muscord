@@ -50,7 +50,7 @@ export const r34Command: Command = {
 			new Set(tags.split(whiteSpaceRegex))
 		);
 
-		let tagsList = [...inputTagsList];
+		const tagsList = [];
 
 		const filter: string =
 			inputMap.get('filter') || 'basic';
@@ -63,10 +63,16 @@ export const r34Command: Command = {
 		)) {
 			const toAppend = filters[appliedFilter];
 			if (toAppend) {
-				tagsList = tagsList.concat(
-					toAppend.split(whiteSpaceRegex)
-				);
+				for (const item of toAppend.split(
+					whiteSpaceRegex
+				)) {
+					tagsList.push(item);
+				}
 			}
+		}
+
+		for (const item of inputTagsList) {
+			tagsList.push(item);
 		}
 
 		const uniqueTagsList = Array.from(new Set(tagsList));
