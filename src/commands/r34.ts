@@ -4,12 +4,11 @@ import {
 	SlashCommandBuilder,
 } from '@discordjs/builders';
 import { Command } from '.';
-import { APIApplicationCommandStringOption } from 'discord-api-types/v10';
 import { ButtonStyle } from '@discordjs/core/http-only';
 
-export const rule34Command: Command = {
+export const r34Command: Command = {
 	data: new SlashCommandBuilder()
-		.setName('rule34')
+		.setName('r34')
 		.setDescription('Uh oh!')
 		.setNSFW(true)
 		.addIntegerOption((option) =>
@@ -39,6 +38,8 @@ export const rule34Command: Command = {
 					value: 'basic',
 				})
 		),
+
+	defer_first: true,
 	run: async (c, interaction, inputMap) => {
 		const times: number = inputMap.get('times') || 15;
 		const tags: string = inputMap.get('tags') || '';
@@ -49,23 +50,19 @@ export const rule34Command: Command = {
 			new Set(tags.split(whiteSpaceRegex))
 		);
 
-
 		let tagsList = [...inputTagsList];
 
 		const filter: string =
 			inputMap.get('filter') || 'basic';
 
-		const filters = new Map<string, string>([
-			[
-				'basic',
-				"-gay* -futa* -anthro*   -interspecies*  -animal* -feline* -comic* -monster* -winx* -size_difference -pokemon_(species) -alicorn* -king_of_the_hill  -cartoon* -male_only  -powerpuff_girls -wind_waker  -nickelodeon -rissma_(maewix1) -hazbin_hotel -furry -idw* -five_nights_at_freddy's -giratina -pseudoregalia -mass_effect -gacha  -tentacle* -ed_edd_n_eddy score:>=100",
-			],
-		]);
+		const filters: any =
+			(await c.env.KV_STORE.get('filters', 'json')) || {};
+		console.log(filters);
 
 		for (const appliedFilter of filter.split(
 			whiteSpaceRegex
 		)) {
-			const toAppend = filters.get(appliedFilter);
+			const toAppend = filters[appliedFilter];
 			if (toAppend) {
 				tagsList = tagsList.concat(
 					toAppend.split(whiteSpaceRegex)

@@ -10,6 +10,7 @@ export const dictCommand: Command = {
 				.setName('word')
 				.setDescription('The word to find definitions for')
 		),
+	defer_first: true,
 	run: async (c, interaction) => {
 		await c
 			.get('api')

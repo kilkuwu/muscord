@@ -1,12 +1,14 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from '.';
+import { InteractionResponseType } from 'discord-api-types/v10';
 
 export const pingCommand: Command = {
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Pong!'),
+	defer_first: true,
 	run: async (c, interaction) => {
-		const response = await c
+		await c
 			.get('api')
 			.interactions.followUp(
 				interaction.application_id,
@@ -15,6 +17,5 @@ export const pingCommand: Command = {
 					content: 'Pong!',
 				}
 			);
-		console.log(response);
 	},
 };

@@ -3,8 +3,9 @@ import MyContext from '../types/MyContext';
 import { SlashCommandOptionsOnlyBuilder } from '@discordjs/builders';
 import { pingCommand } from './ping';
 import { dictCommand } from './dict';
-import { rule34Command } from './rule34';
+import { r34Command } from './r34';
 import { timerCommand } from './timer';
+import { r34FiltersComamnd } from './r34-filters';
 
 export interface Command {
 	data: SlashCommandOptionsOnlyBuilder;
@@ -12,7 +13,9 @@ export interface Command {
 		c: MyContext,
 		interaction: APIChatInputApplicationCommandInteraction,
 		inputMap: Map<string, any>
-	) => Promise<void>;
+	) => Promise<void | Response>;
+	owner_only?: boolean;
+	defer_first?: boolean;
 }
 
 export const commandMap = new Map<string, Command>();
@@ -20,8 +23,9 @@ export const commandMap = new Map<string, Command>();
 export const commands: Command[] = [
 	pingCommand,
 	dictCommand,
-	rule34Command,
-  timerCommand
+	r34Command,
+	timerCommand,
+	r34FiltersComamnd,
 ];
 
 for (const command of commands) {
