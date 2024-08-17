@@ -34,7 +34,7 @@ export const r34FiltersComamnd: Command = {
 
 	owner_only: true,
 	run: async (c, interaction, inputMap) => {
-		const action = inputMap.get('action') || 0;
+		const action = inputMap.get('action') ?? 0;
 
 		if (action == 0) {
 			const filters = (await c.env.KV_STORE.get(

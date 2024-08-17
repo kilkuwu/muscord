@@ -6,6 +6,7 @@ import { dictCommand } from './dict';
 import { r34Command } from './r34';
 import { timerCommand } from './timer';
 import { r34FiltersComamnd } from './r34-filters';
+import { r34ShowOneCommand } from './r34-show-one';
 
 export interface Command {
 	data: SlashCommandOptionsOnlyBuilder;
@@ -26,6 +27,7 @@ export const commands: Command[] = [
 	r34Command,
 	timerCommand,
 	r34FiltersComamnd,
+	r34ShowOneCommand,
 ];
 
 for (const command of commands) {

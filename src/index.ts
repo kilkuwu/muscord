@@ -12,6 +12,7 @@ import {
 import E from './types/Env';
 import chatInputApplicationCommandHandler from './handlers/chatInputApplicationCommandHandler';
 import modalSubmitHandler from './handlers/modalSubmitHandler';
+import messageComponentHandler from './handlers/messageComponentHandler';
 
 const app = new Hono<E>();
 
@@ -70,6 +71,10 @@ app.post('/', verifyDiscordRequest, async (c) => {
 		interaction.type == InteractionType.ModalSubmit
 	) {
 		return await modalSubmitHandler(c, interaction);
+	} else if (
+		interaction.type == InteractionType.MessageComponent
+	) {
+    return await messageComponentHandler(c, interaction);
 	}
 	return c.json({ error: 'Unknown Type' }, 400);
 });

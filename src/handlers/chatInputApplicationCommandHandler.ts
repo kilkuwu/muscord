@@ -60,7 +60,7 @@ export default async function chatInputApplicationCommandHandler(
 
 	c.executionCtx.waitUntil(
 		(async () => {
-			while (c.res.status != 200) {
+			while (!c.res.ok) {
 				await new Promise<void>((f) => f());
 			} // wait for the defer to be finshed
 

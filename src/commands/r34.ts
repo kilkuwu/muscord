@@ -17,7 +17,7 @@ export const r34Command: Command = {
 				.setDescription(
 					'The number of posts to fetch, defaults to 15'
 				)
-				.setMaxValue(50)
+				.setMaxValue(100)
 				.setMinValue(1)
 		)
 		.addStringOption((option) =>
@@ -41,8 +41,8 @@ export const r34Command: Command = {
 
 	defer_first: true,
 	run: async (c, interaction, inputMap) => {
-		const times: number = inputMap.get('times') || 15;
-		const tags: string = inputMap.get('tags') || '';
+		const times: number = inputMap.get('times') ?? 15;
+		const tags: string = inputMap.get('tags') ?? '';
 
 		const whiteSpaceRegex = /\s+/;
 
@@ -53,7 +53,7 @@ export const r34Command: Command = {
 		const tagsList = [];
 
 		const filter: string =
-			inputMap.get('filter') || 'basic';
+			inputMap.get('filter') ?? 'basic';
 
 		const filters: any =
 			(await c.env.KV_STORE.get('filters', 'json')) || {};
@@ -114,22 +114,39 @@ export const r34Command: Command = {
 			const data = (await posts.json()) as any[];
 			for (let i = 0; i < data.length; ) {
 				let cnt = 5;
-				let content = '';
+				let content = '**';
+				let order = 1;
 				const row = new ActionRowBuilder<ButtonBuilder>();
+				const sendOne =
+					new ActionRowBuilder<ButtonBuilder>();
 				while (cnt > 0 && i < data.length) {
-					content += data[i]['file_url'];
 					const original = `https://rule34.xxx/index.php?page=post&s=view&id=${data[i]['id']}`;
-					cnt--;
-					if (cnt) content += '\n';
-
+					content += `[flink${order}](`;
+					content += data[i]['file_url'];
+					content += ')';
 					row.addComponents(
 						new ButtonBuilder()
 							.setURL(original)
-							.setLabel(`[${6 - cnt}]`)
+							.setLabel(`${order}`)
 							.setStyle(ButtonStyle.Link)
 					);
+
+					sendOne.addComponents(
+						new ButtonBuilder()
+							.setStyle(ButtonStyle.Primary)
+							.setCustomId('r34-show-one@' + data[i]['id'])
+							.setLabel(`${order}`)
+					);
+
+					// we need to specify the function that it runs as well
+					// customId = it's like the roots
+					// we need to specify handlers for
+					cnt--;
+					if (cnt) content += '        ';
 					i++;
+					order++;
 				}
+				content += '**';
 
 				await c
 					.get('api')
@@ -138,21 +155,36 @@ export const r34Command: Command = {
 						interaction.token,
 						{
 							content,
-							components: [row.toJSON()],
+							components: [row.toJSON(), sendOne.toJSON()],
 						}
 					);
-				await new Promise((f) => setTimeout(f, 2000));
+				await new Promise((f) => setTimeout(f, 1000));
 			}
 		} catch (err) {
-			await c
-				.get('api')
-				.interactions.followUp(
-					interaction.application_id,
-					interaction.token,
-					{
-						content: 'No posts found!',
-					}
-				);
+			if (
+				err instanceof SyntaxError &&
+				err.message == 'Unexpected end of JSON input'
+			) {
+				await c
+					.get('api')
+					.interactions.followUp(
+						interaction.application_id,
+						interaction.token,
+						{
+							content: 'No posts found!',
+						}
+					);
+			} else {
+				await c
+					.get('api')
+					.interactions.followUp(
+						interaction.application_id,
+						interaction.token,
+						{
+							content: `${err}`,
+						}
+					);
+			}
 		}
 	},
 };
