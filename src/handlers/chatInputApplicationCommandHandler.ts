@@ -63,7 +63,7 @@ export default async function chatInputApplicationCommandHandler(
 			while (!c.res.ok) {
 				await new Promise<void>((f) => f());
 			} // wait for the defer to be finshed
-
+      
 			await command.run(c, interaction, inputMap);
 		})()
 	);

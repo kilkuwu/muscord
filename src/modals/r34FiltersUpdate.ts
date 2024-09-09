@@ -26,12 +26,21 @@ export const r34FiltersUpdateModal: Modal = {
 			.setStyle(TextInputStyle.Paragraph)
 			.setLabel('Filter Value');
 
+		const toAppendInput = new TextInputBuilder()
+			.setCustomId('r34FiltersUpdateToAppend')
+			.setStyle(TextInputStyle.Short)
+			.setLabel('Append (y/n)')
+			.setValue('y');
+
 		modal.addComponents(
 			new ActionRowBuilder<TextInputBuilder>().addComponents(
 				keyInput
 			),
 			new ActionRowBuilder<TextInputBuilder>().addComponents(
 				valueInput
+			),
+			new ActionRowBuilder<TextInputBuilder>().addComponents(
+				toAppendInput
 			)
 		);
 		return modal;
@@ -44,8 +53,16 @@ export const r34FiltersUpdateModal: Modal = {
 
 		const key =
 			interaction.data.components[0].components[0].value;
-		const value =
+		let value =
 			interaction.data.components[1].components[0].value;
+		const toAppend =
+			interaction.data.components[2].components[0].value;
+
+		if (toAppend == 'y') {
+			if (filters.hasOwnProperty(key)) {
+				value = filters[key] + ' ' + value;
+			}
+		}
 
 		if (
 			!filters.hasOwnProperty(key) ||

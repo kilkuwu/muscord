@@ -33,10 +33,6 @@ export const r34Command: Command = {
 				.setDescription(
 					'List of predefined filters to apply to the tag list, seperated by a space'
 				)
-				.addChoices({
-					name: 'basic',
-					value: 'basic',
-				})
 		),
 
 	defer_first: true,
@@ -52,8 +48,7 @@ export const r34Command: Command = {
 
 		const tagsList = [];
 
-		const filter: string =
-			inputMap.get('filter') ?? 'basic';
+		const filter: string = inputMap.get('filter') ?? '';
 
 		const filters: any =
 			(await c.env.KV_STORE.get('filters', 'json')) || {};
@@ -114,7 +109,7 @@ export const r34Command: Command = {
 			const data = (await posts.json()) as any[];
 			for (let i = 0; i < data.length; ) {
 				let cnt = 5;
-				let content = '**';
+				let content = '';
 				let order = 1;
 				const row = new ActionRowBuilder<ButtonBuilder>();
 				const sendOne =
@@ -146,7 +141,6 @@ export const r34Command: Command = {
 					i++;
 					order++;
 				}
-				content += '**';
 
 				await c
 					.get('api')
@@ -158,7 +152,7 @@ export const r34Command: Command = {
 							components: [row.toJSON(), sendOne.toJSON()],
 						}
 					);
-				await new Promise((f) => setTimeout(f, 1000));
+				await new Promise((f) => setTimeout(f, 500));
 			}
 		} catch (err) {
 			if (

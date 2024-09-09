@@ -13,8 +13,6 @@ export const r34FiltersComamnd: Command = {
 			option
 				.setName('action')
 				.setDescription('The action to do with filters')
-				.setMinValue(0)
-				.setMaxValue(2)
 				.setRequired(true)
 				.addChoices([
 					{
@@ -28,6 +26,10 @@ export const r34FiltersComamnd: Command = {
 					{
 						name: 'delete',
 						value: 2,
+					},
+					{
+						name: 'append',
+						value: 3,
 					},
 				])
 		),
@@ -66,5 +68,9 @@ export const r34FiltersComamnd: Command = {
 				data: r34FiltersUpdateModal.data.toJSON(),
 			});
 		}
+
+    if (action == 3) {
+      
+    }
 	},
 };

@@ -8,6 +8,7 @@
     "start": "wrangler dev",
     "test": "vitest",
     "register": "ts-node src/register.ts",
+    "register_alternate": "ts-node src/register_alternate.ts",
     "cf-typegen": "wrangler types",
     "ngrok": "ngrok http --domain=fly-suited-awfully.ngrok-free.app 8787"
   },
